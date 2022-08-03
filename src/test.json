@@ -1,0 +1,17 @@
+{
+  "index": "myindex",
+  "body": {
+    "query": {
+      "match": {
+        "title": "{{title:test}}"
+      }
+    },
+    "facets": {
+      "tags": {
+        "terms": {
+          "field": "tags"
+        }
+      }
+    }
+  }
+}
