@@ -26,7 +26,7 @@ impl Template {
  
         self
             .regex_pattern
-            .captures_iter(&mut replaced_string.clone())
+            .captures_iter( &replaced_string.clone())
             .for_each(|found| {
                 let found = found
                     .get(0)
@@ -44,9 +44,7 @@ impl Template {
                                 Ok(y)
                             });
 
-                        return ay.expect(
-                            format!("Invalid type for the default value of {}. Default Value are strings, boolean, number", key).as_str(),
-                        );
+                        return ay.unwrap_or_else(|_| panic!("Invalid type for the default value of {}. Default Value are strings, boolean, number", key));
                     }
                     panic!(
                         "{} has no default value. Add a value in params or a default value!",

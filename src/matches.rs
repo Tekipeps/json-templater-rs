@@ -12,7 +12,7 @@ impl Match {
         let mut str = str.replace("{{", "");
         str = str.replace("}}", "");
 
-        match str.split_once(":") {
+        match str.split_once(':') {
             Some((a, b)) => {
                 val.key = a.to_string();
                 val.default_value = Some(b.to_string());
