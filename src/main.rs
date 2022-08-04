@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use json_templating_rs::template::Template;
-use serde_json::{json, Value};
+use serde_json::json;
 fn main() {
     let template = r#"
     {
@@ -32,9 +32,6 @@ fn main() {
     params.insert("Foo", json!([]));
     let tmpl = Template::new(template);
 
-    // println!(
-    //     "error: {:#?}",
-    //     serde_json::from_str::<Value>(r#""sdf:sdf""#)
-    // );
-    tmpl.apply(params);
+    let k = tmpl.apply(params);
+    println!("New Value: {:#?}", k);
 }

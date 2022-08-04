@@ -5,7 +5,6 @@ pub struct Match {
 }
 impl Match {
     pub fn convert_string_to_match(str: String) -> Match {
-        println!("{:#?}", str);
         let mut val = Match::default();
         let str: String = serde_json::from_str(&str).unwrap();
         // println!("{}", result);
