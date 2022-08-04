@@ -22,7 +22,6 @@ fn parse(params: Vec<String>, template: &str) -> Vec<Match> {
         })
         .collect();
 
-    println!("{:#?}", matches);
     matches
 }
 
