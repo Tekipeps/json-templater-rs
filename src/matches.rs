@@ -1,5 +1,5 @@
 #[derive(Clone, Debug, Default)]
-pub(crate) struct Match {
+pub struct Match {
     key: String,
     default_value: Option<String>,
 }
@@ -21,5 +21,12 @@ impl Match {
             }
         }
         val
+    }
+
+    pub fn get_default_value(&self) -> Option<&String> {
+        self.default_value.as_ref()
+    }
+    pub fn get_key(&self) -> &str {
+        self.key.as_str()
     }
 }
