@@ -17,7 +17,6 @@ A valid `value` is a:
 3. number e.g `1`
 
 ```json
- let template = "
     {
         "index": "myindex",
         "body": {
@@ -30,16 +29,15 @@ A valid `value` is a:
             "tags": {
               "terms": {
                 "field": "tags",
-                "cool": "{{co: "oooas"}}",
-                "tt": "{{nice?@.+=$()*: 2}}",
+                "cool": "{{co:example_string}}",,
                 "t4":  "{{foo:false}}",
-                "t5": "{{Foo}}",
-                "t5": "{{nice-name:false}}",
+                "t5": "{{Foo}}" // No default value,
+                "t5": "{{nice-name:2}}",
                 "t6": "{{nice_name:false}}"
 
               }
             }
           }
         }
-      }"#;
+      };
 ```
