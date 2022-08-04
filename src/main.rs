@@ -1,18 +1,7 @@
-use serde_json::{Deserializer, Serializer, Value};
+use std::collections::HashMap;
 
-use regex::Regex;
-
-fn parse(params: Vec<String>, template: &str) -> String {
-    let reg: Regex = Regex::new(r"\{\{(\w|:|[\s\-+.,@/\\()?=*_$])+}}").unwrap();
-    let template: Value = serde_json::from_str(template).unwrap();
-
-    match reg.find(template.to_string().as_str()) {
-        Some(x) => println!("{:?}", x),
-        None => println!("{}", "None"),
-    }
-
-    template.to_string()
-}
+use json_templating_rs::template::Template;
+use serde_json::json;
 fn main() {
     let template = r#"
     {
@@ -20,20 +9,29 @@ fn main() {
         "body": {
           "query": {
             "match": {
-              "title": "{{title:test}}"
+              "title": "{{Foo: true}}"
             }
           },
           "facets": {
             "tags": {
               "terms": {
-                "field": "tags"
+                "field": "tags",
+                "cool": "{{co:cool}}",
+                "t4":  "{{foo:false}}",
+                "t5": "{{Foo:2}}",
+                "t6": false,
+                "ty": []
               }
             }
           }
         }
       }"#;
+    let mut params = HashMap::new();
+    params.insert("nice-name", json!(true));
+    params.insert("{{nice?@.+=$()*}}", json!("cool"));
+    params.insert("Foo", json!([]));
+    let tmpl = Template::new(template);
 
-    let result = parse(Vec::new(), template);
-
-    println!("{}", result);
+    let k = tmpl.apply(params);
+    println!("New Value: {:#?}", k);
 }

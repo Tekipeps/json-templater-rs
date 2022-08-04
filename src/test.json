@@ -9,9 +9,11 @@
     "facets": {
       "tags": {
         "terms": {
-          "field": "tags"
+          "field": "tags",
+          "a": "{{co:[2]}}"
         }
       }
     }
   }
 }
+
