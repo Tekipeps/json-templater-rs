@@ -2,16 +2,47 @@ use serde_json::{Deserializer, Serializer, Value};
 
 use regex::{bytes::CaptureMatches, Regex};
 
-fn parse(params: Vec<String>, template: &str) -> String {
-    let reg: Regex = Regex::new(r#"\{\{([A-Za-z0-9-+.,@/\()?=*_$])+(:(.)+)*\}\}"#).unwrap();
-    let template_json: Value = serde_json::from_str(template).expect("Expect a valid Json");
+#[derive(Clone, Debug, Default)]
+struct Match {
+    key: String,
+    default_value: Option<String>,
+}
 
-    let y = reg.captures_iter(template);
+fn parse(params: Vec<String>, template: &str) -> Vec<Match> {
+    let reg: Regex = Regex::new(r#"\{\{([(\w)\-\+\.,@/\()\?=\*_\$])+(:(.)*)?\}\}"#).unwrap();
 
-    for a in y {
-        println!("{:#?}", a);
+    //validate json
+    serde_json::from_str::<Value>(template).expect("Expect a valid Json");
+
+    let matches = reg
+        .captures_iter(template)
+        .map(|a| {
+            let b = a.get(0).unwrap().as_str();
+            convert_string_to_match(b.to_string())
+        })
+        .collect();
+
+    println!("{:#?}", matches);
+    matches
+}
+
+fn convert_string_to_match(str: String) -> Match {
+    let mut val = Match::default();
+
+    // remove {{ and }}
+    let mut str = str.replace("{{", "");
+    str = str.replace("}}", "");
+
+    match str.split_once(":") {
+        Some((a, b)) => {
+            val.key = a.to_string();
+            val.default_value = Some(b.to_string());
+        }
+        None => {
+            val.key = str;
+        }
     }
-    template.to_string()
+    val
 }
 fn main() {
     let template = r#"
@@ -27,8 +58,12 @@ fn main() {
             "tags": {
               "terms": {
                 "field": "tags",
-                "cool": "{{cool:asd}}",
-                "tt": "{{:}}"
+                "cool": "{{co:oooo:o}}",
+                "tt": "{{nice?@.+=$()*}}",
+                "tt2": "{{nice-name}}",
+                "tt3": "{{nice_name}}",
+                "tt3": "{{nice+name}}"
+
               }
             }
           }
@@ -37,9 +72,8 @@ fn main() {
 
     let result = parse(Vec::new(), template);
 
-    let y = r##"{ "key": " { "key2": "val" }" }"##;
-    let k = r#"{"sdf": "["a"]"}"#;
-    // let _b: Value = serde_json::from_str(k).expect("Failed to parse");
+    let k = r#" 1"#;
+    let b: Value = serde_json::from_str(k).expect("Failed to parse");
     // println!("{}", result);
-    println!("{}", k.to_string())
+    println!("{}", b)
 }
