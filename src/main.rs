@@ -16,27 +16,25 @@ fn main() {
             "tags": {
               "terms": {
                 "field": "tags",
-                "cool": "{{co:oooo:o}}",
-                "tt": "{{nice?@.+=$()*: 2}}",
+                "cool": "{{co:cool}}",
                 "t4":  "{{foo:false}}",
-                "t5": "{{Foo}}",
-                "t5": "{{nice-name: false}}",
-                "t6": "{{nice_name: false}}"
-
+                "t5": "{{Foo:2}}",
+                "t6": false,
+                "ty": []
               }
             }
           }
         }
       }"#;
     let mut params = HashMap::new();
-    params.insert("nice-name", json!("true"));
+    params.insert("nice-name", json!(true));
     params.insert("{{nice?@.+=$()*}}", json!("cool"));
-    params.insert("Foo", json!("[]"));
+    params.insert("Foo", json!([]));
     let tmpl = Template::new(template);
 
-    println!(
-        "error: {:#?}",
-        serde_json::from_str::<Value>(r#""sdf:sdf""#)
-    );
-    // tmpl.apply(params);
+    // println!(
+    //     "error: {:#?}",
+    //     serde_json::from_str::<Value>(r#""sdf:sdf""#)
+    // );
+    tmpl.apply(params);
 }

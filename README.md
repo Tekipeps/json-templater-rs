@@ -15,3 +15,31 @@ A valid `value` is a:
 1. string e.g `"bar"`
 2. boolean e.g `true`
 3. number e.g `1`
+
+```json
+ let template = "
+    {
+        "index": "myindex",
+        "body": {
+          "query": {
+            "match": {
+              "title": "{{Foo: true}}"
+            }
+          },
+          "facets": {
+            "tags": {
+              "terms": {
+                "field": "tags",
+                "cool": "{{co: "oooas"}}",
+                "tt": "{{nice?@.+=$()*: 2}}",
+                "t4":  "{{foo:false}}",
+                "t5": "{{Foo}}",
+                "t5": "{{nice-name:false}}",
+                "t6": "{{nice_name:false}}"
+
+              }
+            }
+          }
+        }
+      }"#;
+```
