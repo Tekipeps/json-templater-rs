@@ -19,27 +19,28 @@ A valid `value` is a:
 Example JSON Template
 
 ```json
-    {
-        "index": "myindex",
-        "body": {
-          "query": {
-            "match": {
-              "title": "{{Foo: true}}"
-            }
-          },
-          "facets": {
-            "tags": {
-              "terms": {
-                "field": "tags",
-                "cool": "{{foo:bar}}", // String is the default type for default values
-                "t4":  "{{foo:false}}",
-                "t5": "{{Foo}}" // No default value,
-                "t5": "{{is_cool_api:true}}",
-                "t6": "{{nice_name:false}}"
-
-              }
-            }
-          }
+{
+  "index": "myindex",
+  "body": {
+    "query": {
+      "match": {
+        "title": "{{Foo: true}}"
+      }
+    },
+    "facets": {
+      "tags": {
+        "terms": {
+          "field": "tags",
+          "cool": "{{foo:bar}}",
+          // String is the default type for default values
+          "t4": "{{foo:false}}",
+          "t5": "{{Foo}}",
+          // No default value
+          "t5": "{{is_cool_api:true}}",
+          "t6": "{{nice_name:false}}"
         }
       }
+    }
+  }
+}
 ```
