@@ -36,25 +36,43 @@ impl Template {
 
         let matches = self
             .regex_pattern
-            .captures_iter(&mut replaced_string)
+            .captures_iter(&mut replaced_string.clone())
             .for_each(|found| {
                 let found = found
                     .get(0)
                     .expect("Unable to extract from template ")
                     .as_str();
                 let found = Match::convert_string_to_match(found.to_string());
+                let key = found.get_key();
 
-                let mut actual_value = params.get(&found.get_key());
-
-                //check default and non existing values
-                if let None = found.get_default_value() {
-                    if let None = actual_value {
-                        panic!(
-                            "{} has no default value. Add a value in params or a default value!",
-                            found.get_key()
-                        )
+                let mut opt_actual_value = params.get(key).cloned();
+                let actual_value = opt_actual_value.unwrap_or_else(|| {
+                    if let Some(default_value) = found.get_default_value() {
+                        return serde_json::from_str::<Value>(default_value.as_str()).expect(
+                            format!("Invalid JSON for the default value of {}", key).as_str(),
+                        );
                     }
+                    panic!(
+                        "{} has no default value. Add a value in params or a default value!",
+                        key
+                    );
+                });
+                //check default and non existing values
+
+                // TODO: escape key names before regex check
+                let mut key_reg =
+                    Regex::new(format!(r#"\{{\{{{}(:)?\}}\}}"#, key).as_str()).unwrap();
+                if let Some(y) = found.get_default_value() {
+                    key_reg =
+                        Regex::new(format!(r#"\{{\{{{}(:{})?\}}\}}"#, key, y).as_str()).unwrap();
                 }
+
+                // println!("{} {:#?}", key_reg, key_reg.find(replaced_string.as_str()));
+                replaced_string = key_reg
+                    .replace(replaced_string.as_str(), actual_value.to_string())
+                    .to_string();
+
+                println!("{}", replaced_string);
             });
 
         y
