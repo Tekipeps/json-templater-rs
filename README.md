@@ -16,6 +16,8 @@ A valid `value` is a:
 2. boolean e.g `true`
 3. number e.g `1`
 
+Example JSON Template
+
 ```json
     {
         "index": "myindex",
@@ -29,15 +31,15 @@ A valid `value` is a:
             "tags": {
               "terms": {
                 "field": "tags",
-                "cool": "{{co:example_string}}",,
+                "cool": "{{foo:bar}}", // String is the default type for default values
                 "t4":  "{{foo:false}}",
                 "t5": "{{Foo}}" // No default value,
-                "t5": "{{nice-name:2}}",
+                "t5": "{{is_cool_api:true}}",
                 "t6": "{{nice_name:false}}"
 
               }
             }
           }
         }
-      };
+      }
 ```
